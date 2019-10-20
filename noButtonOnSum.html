@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <!-- script jquery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+        <script>
+            //observa alteracoes nos elementos da DOM
+            $(document).ready(function(){
+                //se ocorreu um evento do tipo keyup no elemento de id number1, inicia a funcao compute
+                $("#number1").keyup((e) => {
+                    //inicia a funcao compute com o valor de x = (valor atual do input number1) e null como valor do input number 2
+                    compute(e.currentTarget.value, null);
+                });
+
+                //se ocorreu um evento do tipo keyup no elemento de id number2, inicia a funcao compute
+                $("#number2").keyup((e) => {
+                    //inicia a funcao compute com o valor de y = (valor atual do input number2) e null como valor do input number 1
+                    compute(null, e.currentTarget.value);
+                });
+            });
+
+            //envia dois numeros para um endpoint no servidor
+            compute = (x, y) => {
+                //se x ou y nao foram passados como parametro, recebem o valor de seu respectivo input como valor inicial
+                x = (x === null) ? $("#number1").val() : x;
+                y = (y === null) ? $("#number2").val() : y;
+
+                //envia x e y para um endpoint no servidor
+                $.get(`http://localhost:3333/sum?x=${x}&y=${y}`, (data, status) => {
+                    //se o retorno do servidor for NaN = nao conseguiu calcular, muda o texto do elemento com id = result para Valores invalidos
+                    //senao muda o valor do texto de resultado para o valor da soma retornado pelo servidor
+                    if(data === 'NaN')
+                        $("#result").text('Valores inválidos.');
+                    else 
+                        $("#result").text(data);
+                });
+            }
+        </script>
+
+        <!-- CSS -->
+        <style>
+            html, body{
+                margin: 0;
+                padding: 0;
+            }
+
+            body{
+                background-color: #5256Ad;
+            }
+
+            input{
+                margin: 20px 0;
+                height: 30px;
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 14px;
+                border: none;
+                border-bottom-style: inset;
+                border-bottom-width: 2px;
+                border-bottom-color: #5256Ad;
+            }
+
+            input:focus{
+                outline: none;
+                border-bottom-style: inset;
+                border-bottom-width: 2px;
+                border-bottom-color: #FE73B1;
+            }
+
+            input:first-of-type {
+                margin-top: 80px;
+            }
+
+            input:last-of-type {
+                margin-bottom: 110px;
+            }
+
+            form{
+                width: 100%;
+                height: 100%;
+            }
+
+            .container-form{
+                position: absolute;
+                right: 0;
+                left: 0;
+                bottom: 0;
+                top: 0;
+                height: 300px;
+                width: 600px;
+                margin: auto;
+            }
+
+            .form{
+                flex-direction: column;
+                width: 200px;
+                background-color: #FFF;
+                padding: 0 40;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 200px;
+                margin: auto;
+            }
+
+            .backgrond-form{
+                margin: auto;
+                background-color: #999EDE;
+                width: 600PX;
+                height: 250px;
+                margin-top: 20px;
+            }
+
+            h1{
+                color: #FFF;
+                text-align: right;
+                font-size: 18px;
+                font-family: Arial, Helvetica, sans-serif;
+                padding-top: 20px;
+                padding-right: 30px;
+            }
+
+            .backgrond-form > div{
+                right: 0;
+                position: absolute;
+                width: 250px;
+                height: 100px;
+            }
+
+            #result{
+                color: #FFF;
+                text-align: center;
+                font-size: 40px;
+                font-family: Arial, Helvetica, sans-serif;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+
+    <body>
+        <form>
+            <div class="container-form">
+                <div class="form">
+                    <input id="number1" type="text" autocomplete="off" placeholder="Number 1" />
+                    <input id="number2" type="text" autocomplete="off" placeholder="Number 2" />
+                </div>
+                <div class="backgrond-form">
+                    <h1>Sum of two numbers</h1>
+                    <div>
+                        <p id="result"></p>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

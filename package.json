@@ -1,0 +1,11 @@
+{
+  "name": "atv_jquery",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Fernando Severino Almeida",
+  "license": "MIT",
+  "private": null,
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
